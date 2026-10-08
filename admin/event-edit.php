@@ -1,0 +1,26 @@
+<?php
+require_once __DIR__ . '/../includes/auth.php';require_admin();
+$id=(int)($_GET['id']??$_POST['id']??0);$event=get_event_by_id($id);if(!$event){http_response_code(404);exit('Event not found.');}
+if($_SERVER['REQUEST_METHOD']==='POST'){
+ verify_csrf();
+ if(isset($_POST['delete'])){db()->prepare('DELETE FROM events WHERE id=?')->execute([$id]);flash('Event deleted.');redirect('events.php');}
+ $status=in_array($_POST['status']??'',['draft','open','closed'],true)?$_POST['status']:'draft';
+ $stmt=db()->prepare('UPDATE events SET title=?,event_type=?,theme=?,description=?,event_date=?,start_time=?,end_time=?,venue=?,organizer=?,speaker=?,target_participants=?,expected_participants=?,status=?,evaluation_start=?,evaluation_deadline=?,allow_anonymous=? WHERE id=?');
+ $stmt->execute([trim((string)$_POST['title']),trim((string)$_POST['event_type']),trim((string)$_POST['theme'])?:null,trim((string)$_POST['description'])?:null,$_POST['event_date'],$_POST['start_time']?:null,$_POST['end_time']?:null,trim((string)$_POST['venue'])?:null,trim((string)$_POST['organizer'])?:null,trim((string)$_POST['speaker'])?:null,trim((string)$_POST['target_participants'])?:null,$_POST['expected_participants']!==''?(int)$_POST['expected_participants']:null,$status,$_POST['evaluation_start']?:null,$_POST['evaluation_deadline']?:null,!empty($_POST['allow_anonymous'])?1:0,$id]);
+ flash('Event updated successfully.');redirect('event-edit.php?id='.$id);
+}
+$pageTitle='Edit Event';$adminArea=true;require __DIR__.'/../includes/header.php';
+?>
+<div class="section-title"><div><h1>Edit Event</h1><p><?= h($event['code']) ?> · <?= h($event['title']) ?></p></div><div class="actions"><a class="btn ghost" href="participant-fields.php?event_id=<?= $id ?>">Participant Information</a><a class="btn ghost" href="questions.php?event_id=<?= $id ?>">Questions</a><a class="btn ghost" href="qr.php?event_id=<?= $id ?>">QR Code</a><a class="btn ghost" href="analytics.php?event_id=<?= $id ?>">Analytics</a></div></div>
+<div class="card card-pad"><form method="post"><input type="hidden" name="csrf_token" value="<?= h(csrf_token()) ?>"><input type="hidden" name="id" value="<?= $id ?>"><div class="form-grid">
+<div class="field full"><label>Event Title *</label><input name="title" required value="<?= h($event['title']) ?>"></div>
+<div class="field"><label>Event Type</label><select name="event_type"><?php foreach(['Activity','Seminar','Workshop','Training','Conference','Orientation','Other'] as $t): ?><option <?= $event['event_type']===$t?'selected':'' ?>><?= h($t) ?></option><?php endforeach; ?></select></div><div class="field"><label>Theme</label><input name="theme" value="<?= h($event['theme']) ?>"></div>
+<div class="field full"><label>Description</label><textarea name="description"><?= h($event['description']) ?></textarea></div>
+<div class="field"><label>Date *</label><input type="date" name="event_date" required value="<?= h($event['event_date']) ?>"></div><div class="field"><label>Venue</label><input name="venue" value="<?= h($event['venue']) ?>"></div>
+<div class="field"><label>Start Time</label><input type="time" name="start_time" value="<?= h($event['start_time']?substr($event['start_time'],0,5):'') ?>"></div><div class="field"><label>End Time</label><input type="time" name="end_time" value="<?= h($event['end_time']?substr($event['end_time'],0,5):'') ?>"></div>
+<div class="field"><label>Organizer</label><input name="organizer" value="<?= h($event['organizer']) ?>"></div><div class="field"><label>Speaker / Trainer / Facilitator</label><input name="speaker" value="<?= h($event['speaker']) ?>"></div>
+<div class="field"><label>Target Participants</label><input name="target_participants" value="<?= h($event['target_participants']) ?>"></div><div class="field"><label>Expected Participants</label><input type="number" min="0" name="expected_participants" value="<?= h($event['expected_participants']) ?>"></div>
+<div class="field"><label>Status</label><select name="status"><?php foreach(['draft','open','closed'] as $s): ?><option value="<?= $s ?>" <?= $event['status']===$s?'selected':'' ?>><?= ucfirst($s) ?></option><?php endforeach; ?></select></div><div class="field"><label>Evaluation Start</label><input type="datetime-local" name="evaluation_start" value="<?= $event['evaluation_start']?h(date('Y-m-d\TH:i',strtotime($event['evaluation_start']))):'' ?>"></div>
+<div class="field"><label>Evaluation Deadline</label><input type="datetime-local" name="evaluation_deadline" value="<?= $event['evaluation_deadline']?h(date('Y-m-d\TH:i',strtotime($event['evaluation_deadline']))):'' ?>"></div><div class="field"><label><input type="checkbox" name="allow_anonymous" value="1" style="width:auto" <?= $event['allow_anonymous']?'checked':'' ?>> Allow anonymous</label><div class="muted" style="margin-top:6px"><a href="participant-fields.php?event_id=<?= $id ?>">Edit Participant Information fields</a></div></div>
+</div><div class="actions" style="margin-top:18px"><button>Save Changes</button><button class="danger" type="submit" name="delete" value="1" data-confirm="Delete this event and all its evaluation data?">Delete Event</button></div></form></div>
+<?php require __DIR__.'/../includes/footer.php'; ?>

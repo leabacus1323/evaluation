@@ -1,0 +1,70 @@
+QUESTION UPLOAD FLOW
+====================
+
+New simplified workflow:
+1. Log in as administrator.
+2. Create the event.
+3. The system automatically opens "Upload Evaluation Questions".
+4. Upload either:
+   A. TXT - one question per line; or
+   B. CSV - use question_upload_template.csv for categories and mixed question types.
+5. Review/edit imported questions if needed.
+6. Set the event status to Open.
+7. Share the evaluation link or QR code.
+8. View responses, analytics, and reports.
+
+SIMPLE TXT FORMAT
+-----------------
+The objectives were clearly presented.
+The activity was relevant to my needs.
+The facilitator explained the topic clearly.
+I can apply what I learned.
+
+All TXT questions use the default type and Likert wording selected on the upload page.
+
+ADVANCED CSV COLUMNS
+--------------------
+category
+question_text
+question_type
+likert_style
+required
+options
+sort_order
+
+Supported question_type values:
+likert
+multiple_choice
+checkbox
+yes_no
+dropdown
+short_answer
+paragraph
+
+Likert styles:
+agreement = Strongly Agree to Strongly Disagree
+quality = Excellent to Poor
+
+Required values:
+1 / yes / true = required
+0 / no / false = optional
+
+For multiple choice, checkbox, and dropdown questions, separate choices with the | symbol:
+Option 1|Option 2|Option 3
+
+You can create the CSV in Microsoft Excel or Google Sheets and save/download it as CSV UTF-8.
+TXT and CSV uploads are intentionally used because they work reliably on shared hosting such as InfinityFree without extra PHP extensions.
+
+GOOGLE FORM GENERATION
+----------------------
+After importing the question file, you may open Admin > Google Forms and click
+Generate Google Form. The question types are converted as follows:
+- likert -> Google Forms multiple-choice 5-to-1 rating labels
+- multiple_choice -> multiple choice
+- checkbox -> checkboxes
+- yes_no -> Yes / No
+- dropdown -> dropdown
+- short_answer -> short answer
+- paragraph -> paragraph response
+
+Google Form responses are linked automatically to Google Sheets in Google Drive.

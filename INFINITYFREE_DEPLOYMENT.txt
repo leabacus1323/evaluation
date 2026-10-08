@@ -1,0 +1,40 @@
+INFINITYFREE DEPLOYMENT - EVENT EVALUATION SYSTEM
+
+IMPORTANT
+1. Use a NEW MySQL database for this system.
+2. Do NOT reuse the existing Panaghiusa/tabulation database if it already has an `events` table.
+3. Upload the CONTENTS of this folder directly into the domain's htdocs folder, not the outer folder itself.
+
+DEPLOYMENT
+1. InfinityFree Client Area > Hosting Account > MySQL Databases.
+2. Create a new database, e.g. evaluation.
+3. Copy the exact MySQL Hostname, Database Name, Username, and MySQL/Hosting Account Password.
+4. Open phpMyAdmin for that new database.
+5. Import schema.sql. Do not add CREATE DATABASE or USE statements.
+6. Edit includes/config.php:
+   define('DB_HOST', 'YOUR_MYSQL_HOST');
+   define('DB_NAME', 'YOUR_DATABASE_NAME');
+   define('DB_USER', 'YOUR_DATABASE_USERNAME');
+   define('DB_PASS', 'YOUR_MYSQL_PASSWORD');
+   define('DB_PORT', 3306);
+7. BASE_URL can stay blank. If QR links are wrong, set BASE_URL to the exact HTTPS URL with no trailing slash.
+8. Upload all files/folders in this package directly into the domain's htdocs directory.
+9. Visit the domain. Then open /login.php.
+10. Login: admin / admin123.
+11. Immediately change the admin password under Admin > Settings.
+
+IF YOU SEE A DATABASE ERROR
+- Access denied: re-copy the InfinityFree MySQL/hosting account password and confirm DB_HOST/DB_NAME/DB_USER.
+- Unknown database: verify the exact full InfinityFree database name.
+- Do not use localhost as DB_HOST.
+
+FILES THAT MUST EXIST IN htdocs
+index.php
+login.php
+evaluate.php
+submit-evaluation.php
+thank-you.php
+admin/
+includes/
+schema.sql
+assets/ (if present)

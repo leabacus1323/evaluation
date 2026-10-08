@@ -1,0 +1,7 @@
+category,question_text,question_type,likert_style,required,options,sort_order
+Program Content,The objectives of the activity were clearly presented.,likert,agreement,1,,1
+Program Content,The topics were relevant to the purpose of the activity.,likert,agreement,1,,2
+Speaker / Facilitator,The speaker explained the topic clearly.,likert,quality,1,,3
+Overall Evaluation,Would you recommend a similar activity in the future?,yes_no,,1,,4
+Participant Feedback,What did you like most about the activity?,paragraph,,0,,5
+Participant Profile,Which session did you attend?,multiple_choice,,1,Session 1|Session 2|Both,6

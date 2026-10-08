@@ -1,0 +1,6 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<FilesMatch "^(schema\.sql|README_INSTALL\.txt)$">
+  Require all denied
+</FilesMatch>

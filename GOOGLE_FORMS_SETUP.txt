@@ -1,0 +1,95 @@
+GOOGLE FORMS + GOOGLE DRIVE INTEGRATION SETUP
+==============================================
+
+WHAT THIS FEATURE DOES
+----------------------
+From the PHP admin dashboard, you can click "Generate Google Form" for an event.
+The system sends the event details and uploaded questions to a Google Apps Script
+Web App. Google then automatically creates:
+
+1. A Google Form containing the event evaluation questions.
+2. A Google Sheets response workbook linked to that Form.
+3. Both files are stored in the Google Drive of the Apps Script owner.
+4. If a Drive Folder ID is configured, both files are moved into that folder.
+5. The Evaluation System saves the Form URL, Edit URL, Summary URL, and Sheet URL.
+
+The normal PHP evaluation form remains available. Google Form generation is an
+optional second distribution channel.
+
+STEP 1 - CREATE THE APPS SCRIPT
+-------------------------------
+1. Sign in to the Google account that should OWN the generated Forms and Sheets.
+2. Open https://script.google.com and create a New Project.
+3. Open Code.gs.
+4. Delete the sample code.
+5. Copy the contents of google-apps-script/Code.gs from this package.
+6. Change:
+
+   const WEB_APP_SECRET = 'CHANGE_THIS_TO_A_LONG_RANDOM_SECRET';
+
+   to a long random secret known only to you.
+7. Save the Apps Script project.
+
+STEP 2 - DEPLOY AS A WEB APP
+----------------------------
+1. Click Deploy > New deployment.
+2. Select type: Web app.
+3. Execute as: Me.
+4. Who has access: Anyone.
+5. Click Deploy.
+6. Google will ask you to authorize the script. Allow Forms, Sheets, and Drive.
+7. Copy the Web App URL ending in /exec.
+
+IMPORTANT: The public Web App is protected by your shared secret. Do not publish
+or share the secret. If your Google Workspace administrator disables the
+"Anyone" deployment option, ask the administrator to allow it or use an account
+where anonymous Web App access is permitted.
+
+STEP 3 - CONFIGURE THE PHP SYSTEM
+---------------------------------
+1. Log in to the Evaluation System as administrator.
+2. Open Settings.
+3. Under Google Forms & Drive Integration, enter:
+   - Apps Script Web App URL (/exec)
+   - The exact same Shared Secret from Code.gs
+   - Optional Google Drive Folder ID
+4. Save.
+5. Click "Test Google Connection".
+
+HOW TO GET A GOOGLE DRIVE FOLDER ID
+-----------------------------------
+Open the destination folder in Google Drive. Example URL:
+https://drive.google.com/drive/folders/1AbCDEFghiJKLmnoPQR
+
+The Folder ID is:
+1AbCDEFghiJKLmnoPQR
+
+GENERATING A FORM
+-----------------
+1. Create an event.
+2. Upload/import the questions.
+3. Open Admin > Google Forms.
+4. Click Generate Google Form.
+5. After generation, use:
+   - Open Form: respondent version
+   - Edit Form: Google Forms editor
+   - Response Sheet: linked Google Sheet in Drive
+   - Summary: Google Forms response summary
+
+If the event is Open when generated, the Google Form accepts responses.
+If the event is Draft/Closed, the generated form starts closed. Use "Sync Status"
+after changing an event between Open and Closed.
+
+EXISTING INSTALLATIONS
+----------------------
+The Google Forms admin page automatically adds the new Google-link columns to the
+events table if they do not exist. A migration_google_forms.sql file is also
+included for manual database migration if preferred.
+
+INFINITYFREE NOTE
+-----------------
+This integration makes an outbound HTTPS request to Google Apps Script. If your
+specific InfinityFree free-hosting account blocks that outbound request, the
+system will display the returned connection error. In that case, use hosting
+that permits outbound HTTPS requests or generate the Google Form from a server
+without that restriction. The core PHP/MySQL evaluation system continues to work.

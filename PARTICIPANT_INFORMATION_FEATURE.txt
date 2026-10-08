@@ -1,0 +1,47 @@
+EDITABLE PARTICIPANT INFORMATION FEATURE
+========================================
+
+WHAT CHANGED
+Admin can now customize the Participant Information section for each event instead of using a fixed set of fields.
+
+WHERE TO FIND IT
+Admin > Events > Participant Info
+or
+Edit Event > Participant Information
+
+ADMIN CAN
+- Add participant fields
+- Rename fields
+- Change field type
+- Set placeholder/help text
+- Add choices for dropdown/radio/checkbox fields
+- Mark fields Required or Optional
+- Mark identifying fields to be omitted when Anonymous is selected
+- Reorder fields using Sort Order
+- Remove fields
+- Restore fields that were removed after they already had responses
+- Preview the public evaluation form
+
+DEFAULT FIELDS FOR NEW EVENTS
+- Name
+- Email
+- Department / Office
+- Program / Course
+- Year Level
+- Participant Type
+
+SUPPORTED TYPES
+text, email, number, dropdown, single choice, multiple choice, paragraph
+
+DATA SAFETY
+If a field already has saved answers, Remove does not delete historical data. It archives/hides the field from future participants. Response Detail and CSV export can still include preserved values.
+
+ANONYMOUS SUBMISSIONS
+Fields marked "Identifying / omit for anonymous responses" are hidden and cleared on the website when the participant selects anonymous submission. Name and Email are marked identifying by default.
+
+GOOGLE FORMS
+The generated Google Form now receives the same active Participant Information fields. Google Forms cannot dynamically hide fields after an anonymous toggle, so identifying fields are made optional when anonymous responses are allowed. Regenerate a Google Form after changing participant fields.
+
+EXISTING INSTALLATIONS
+The application automatically creates the new tables. You may also import:
+  migration_participant_fields.sql

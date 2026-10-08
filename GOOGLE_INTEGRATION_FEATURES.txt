@@ -1,0 +1,16 @@
+GOOGLE INTEGRATION FEATURES
+===========================
+- Admin > Google Forms page
+- One-click Google Form generation from event questions
+- Automatic linked Google Sheets response workbook
+- Optional Google Drive folder destination
+- Stores Google Form respondent URL
+- Stores Google Form edit URL
+- Stores Google Forms response-summary URL
+- Stores linked Google Sheet URL
+- Regenerate form option
+- Sync open/closed response status with local event status
+- QR page can switch between website evaluation and Google Form
+- Google connection test in Settings
+- Shared-secret authentication between PHP and Apps Script
+- Automatic database migration for existing installations
